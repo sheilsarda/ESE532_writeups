@@ -1,0 +1,67 @@
+[ec2-user@ip-172-31-46-28 assignment]$ ./app
+Total time taken by filter_horizontal is  : 2.94201e+07 ns.
+Total time taken by filter_vertical is    : 3.26903e+07 ns.
+---------------------------------------------------------------
+Average latency of filter_horizontal  is  : 2.94201e+07 ns.
+Average latency of filter_vertical  is    : 3.26903e+07 ns.
+Application completed successfully.
+Total time taken by the loop is           : 1.28811e+08 ns.
+Total time taken by scale is              : 3.93261e+06 ns.
+Total time taken by filter is             : 6.2473e+07 ns.
+Total time taken by differentiate is      : 8.56184e+06 ns.
+Total time taken by compress is           : 4.59722e+07 ns.
+---------------------------------------------------------------
+Average latency of each loop iteration is : 1.28811e+08 ns.
+Average latency of scale is               : 3.93261e+06 ns.
+Average latency of filter is              : 6.2473e+07 ns.
+Average latency of differentiate is       : 8.56184e+06 ns.
+Average latency of compress is            : 4.59722e+07 ns.
+
+
+ Performance counter stats for './app':
+
+        131.926248      task-clock (msec)         #    0.994 CPUs utilized
+                 2      context-switches          #    0.015 K/sec
+                 0      cpu-migrations            #    0.000 K/sec
+             2,134      page-faults               #    0.016 M/sec
+       302,853,636      cycles                    #    2.296 GHz
+       568,094,736      instructions              #    1.88  insn per cycle
+   <not supported>      branches
+         2,202,715      branch-misses
+
+       0.132675582 seconds time elapsed
+
+--------------------------------------------------------------------------------------------------------------------
+Filter_horizontal assembly instructions
+--------------------------------------------------------------------------------------------------------------------
+(gdb) n
+60              Sum += Coefficients[i] * Input[Y * INPUT_WIDTH + X + i];
+(gdb) disassemble
+Dump of assembler code for function Filter_horizontal(unsigned char const*, unsigned char*):
+   0x00000000004014a0 <+0>:     add     x9, x0, #0x2dc, lsl #12
+   0x00000000004014a4 <+4>:     adrp    x6, 0x420000
+   0x00000000004014a8 <+8>:     add     x8, x0, #0x7ca
+   0x00000000004014ac <+12>:    add     x9, x9, #0xe8a
+=> 0x00000000004014b0 <+16>:    add     x6, x6, #0xcc0
+   0x00000000004014b4 <+20>:    sub     x5, x8, #0x7ca
+   0x00000000004014b8 <+24>:    mov     x7, x1
+   0x00000000004014bc <+28>:    nop
+   0x00000000004014c0 <+32>:    mov     x0, #0x0                        // #0
+   0x00000000004014c4 <+36>:    mov     w2, #0x0                        // #0
+   0x00000000004014c8 <+40>:    ldrb    w4, [x5, x0]
+   0x00000000004014cc <+44>:    ldr     w3, [x6, x0, lsl #2]
+   0x00000000004014d0 <+48>:    add     x0, x0, #0x1
+   0x00000000004014d4 <+52>:    cmp     x0, #0x7
+   0x00000000004014d8 <+56>:    madd    w2, w4, w3, w2
+   0x00000000004014dc <+60>:    b.ne    0x4014c8 <Filter_horizontal(unsigned char const*, unsigned char*)+40>  // b.any
+   0x00000000004014e0 <+64>:    lsr     w2, w2, #8
+   0x00000000004014e4 <+68>:    strb    w2, [x7], #1
+   0x00000000004014e8 <+72>:    add     x5, x5, #0x1
+   0x00000000004014ec <+76>:    cmp     x8, x5
+   0x00000000004014f0 <+80>:    b.ne    0x4014c0 <Filter_horizontal(unsigned char const*, unsigned char*)+32>  // b.any
+   0x00000000004014f4 <+84>:    add     x8, x8, #0x7d0
+   0x00000000004014f8 <+88>:    add     x1, x1, #0x7ca
+   0x00000000004014fc <+92>:    cmp     x9, x8
+   0x0000000000401500 <+96>:    b.ne    0x4014b4 <Filter_horizontal(unsigned char const*, unsigned char*)+20>  // b.any
+   0x0000000000401504 <+100>:   ret
+End of assembler dump.

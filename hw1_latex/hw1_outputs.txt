@@ -1,0 +1,37 @@
+lscpu
+Architecture:        aarch64
+Byte Order:          Little Endian
+CPU(s):              4
+On-line CPU(s) list: 0-3
+Thread(s) per core:  1
+Core(s) per socket:  4
+Socket(s):           1
+NUMA node(s):        1
+Model:               3
+BogoMIPS:            166.66
+L1d cache:           32K
+L1i cache:           48K
+L2 cache:            2048K
+NUMA node0 CPU(s):   0-3
+Flags:               fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+
+
+uname -a
+Linux ip-172-31-19-211.us-east-2.compute.internal 4.14.192-147.314.amzn2.aarch64 #1 SMP Mon Aug 17 06:07:21 UTC 2020 aarch64 aarch64 aarch64 GNU/Linux
+
+gcc --version
+gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-9)
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[ec2-user@ip-172-31-46-28 c-tutorial]$ ./addr_print
+Address for a-d:                                                                                                    
+f9d836c8                                                                                                            
+f9d836b8                                                                                                            
+1671d260                                                                                                            
+1671d280
+
+
+[ec2-user@ip-172-31-46-28 debug_program]$ ./program                                                                 
+The secret message is: Well Done!!!
